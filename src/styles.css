@@ -1,0 +1,26 @@
+body {
+    background-color: #282724;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: white;
+}
+
+.btn-report {
+    background-color: #3D47A4;
+    color: white;
+}
+
+.list-item {
+    text-decoration: none;
+    transition: transform .2s;
+    background-color: #3A3A3E;
+    color: white;
+}
+
+.list-item:hover {
+    text-decoration: none;
+    background-color: #333333;
+    color: white;
+    transform: scale(1.02);
+}
