@@ -22,7 +22,7 @@ export default () => <div className="container-fluid text-white animated fadeIn"
         <div className="col-xs-12 col-sm-12 col-md-6 col-lg-3">
             <div className="d-flex justify-content-between align-items-center">
                 <h2>Last Cases</h2>
-                <span className="badge badge-light">last 30 days</span>
+                <span className="badge badge-light">detected by sensors</span>
             </div>
             <Cases/>
         </div>

@@ -1,9 +1,15 @@
 import React from "react";
-import {Link, Route, Switch} from "react-router-dom";
+import {Link, Route} from "react-router-dom";
 import {CameraLogsTable, CasesTable} from "./Tables";
+import CaseModal from "./Modals/CaseModal";
+
 
 export default () => {
-    const activeTab = window.location.pathname.split('/').slice(-1)[0];
+    if (window.location.pathname.split('/').length === 3) {
+        var activeTab = window.location.pathname.split('/').slice(-2)[1];
+    } else {
+        var activeTab = window.location.pathname.split('/').slice(-2)[0];
+    }
     const activeLink = (currentTab) => activeTab === currentTab ? 'nav-link active' : 'nav-link text-white';
 
     return (
@@ -11,14 +17,24 @@ export default () => {
             <h1 className="py-2">Logs</h1>
             <ul className="nav nav-tabs nav-fill">
                 <li className="nav-item">
-                    <Link to={'/logs/cases'}
+                    <Link to={{
+                        pathname: '/logs/cases',
+                        state: {
+                            endpoint: "cases"
+                        }
+                    }}
                           className={activeLink('cases')}
                     >
                         Cases
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link to={'/logs/camera_logs'}
+                    <Link to={{
+                        pathname: '/logs/camera_logs',
+                        state: {
+                            endpoint: "logs"
+                        }
+                    }}
                           className={activeLink('camera_logs')}
                     >
                         Camera Logs
@@ -26,10 +42,9 @@ export default () => {
                 </li>
             </ul>
             <div className="tab-content">
-                <Switch>
-                    <Route path={'/logs/cases'} exact component={CasesTable}/>
-                    <Route path={'/logs/camera_logs'} component={CameraLogsTable}/>
-                </Switch>
+                <Route path={'/logs/cases'} component={CasesTable}/>
+                <Route path={'/logs/camera_logs'} component={CameraLogsTable}/>
+                <Route path={"/logs/cases/:id"} component={CaseModal}/>
             </div>
         </div>
     )

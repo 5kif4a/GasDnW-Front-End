@@ -1,22 +1,22 @@
 import React from "react";
+import {NavLink} from "react-router-dom";
 
 function Link(props) {
-    var active = props.href === window.location.pathname;
+    const active = props.href === window.location.pathname;
     return (
         <li
             className={
                 active ? "nav-item active" : "nav-item"
             }
         >
-            <a className="nav-link" href={props.href}>
+            <NavLink className="nav-link" to={props.href}>
                 {props.name}
-            </a>
+            </NavLink>
         </li>
     );
 }
 
 export default function Navbar() {
-
     const state = {
         items: [
             {
@@ -40,9 +40,9 @@ export default function Navbar() {
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a className="navbar-brand" href="/">
+            <NavLink className="navbar-brand" to="/">
                 GasDnW
-            </a>
+            </NavLink>
             <button
                 className="navbar-toggler"
                 type="button"

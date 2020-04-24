@@ -6,11 +6,13 @@ import Logs from "../Logs/Logs";
 import Reports from "../Reports/Reports";
 import Home from "../Home/Home";
 import NotFound from "../Utils/NotFound";
+import Navbar from "../Navbar/Navbar";
 
 export default function Base() {
     return (
         <>
             <BrowserRouter>
+                <Navbar />
                 <Switch>
                     <Route exact path={"/"} component={Home}/>
                     <Route path={"/monitoring"} component={Monitoring}/>
@@ -18,7 +20,7 @@ export default function Base() {
                     <Route path={"/logs/cases"} component={Logs}/>
                     <Route path={"/logs/camera_logs"} component={Logs}/>
                     <Route path={"/reports"} component={Reports}/>
-                    <Route component={NotFound} />
+                    <Route render={NotFound} />
                 </Switch>
             </BrowserRouter>
         </>

@@ -10,25 +10,30 @@ const Plot = createPlotlyComponent(Plotly);
 
 const selectorOptions = {
     buttons: [{
+        step: 'hour',
+        stepmode: 'todate',
+        count: 12,
+        label: '12h'
+    },{
+        step: 'day',
+        stepmode: 'todate',
+        count: 1,
+        label: '1d'
+    },{
+        step: 'day',
+        stepmode: 'todate',
+        count: 3,
+        label: '3d'
+    },{
+        step: 'day',
+        stepmode: 'todate',
+        count: 7,
+        label: '1w'
+    }, {
         step: 'month',
         stepmode: 'backward',
         count: 1,
         label: '1m'
-    }, {
-        step: 'month',
-        stepmode: 'backward',
-        count: 6,
-        label: '6m'
-    }, {
-        step: 'year',
-        stepmode: 'todate',
-        count: 1,
-        label: 'YTD'
-    }, {
-        step: 'year',
-        stepmode: 'backward',
-        count: 1,
-        label: '1y'
     }, {
         step: 'all',
     }],
