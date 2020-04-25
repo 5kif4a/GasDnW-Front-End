@@ -73,7 +73,7 @@ const ButtonViewDetail = (props) => <Link
         }
     }>
     View details <FontAwesomeIcon icon={faInfoCircle}/>
-</Link>
+</Link>;
 
 function Table(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -116,7 +116,7 @@ function Table(props) {
     return (
         <>
             {isLoading ? <Spinner/> :
-                <MDBContainer>
+                <MDBContainer fluid>
                     <MDBDataTable
                         dark
                         className="text-white my-2 animated fadeIn"

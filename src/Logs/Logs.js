@@ -13,7 +13,7 @@ export default () => {
     const activeLink = (currentTab) => activeTab === currentTab ? 'nav-link active' : 'nav-link text-white';
 
     return (
-        <div className="container animated fadeIn">
+        <div className="container-fluid animated fadeIn">
             <h1 className="py-2">Logs</h1>
             <ul className="nav nav-tabs nav-fill">
                 <li className="nav-item">

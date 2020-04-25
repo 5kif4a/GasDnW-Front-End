@@ -1,19 +1,20 @@
 import React from "react";
 import DHTPlot from "../Plots/DHTPlots";
 import MQ2Plot from "../Plots/MQ2Plot";
+import {Link} from "react-router-dom";
 
 export default () => {
     return (
-        <div className="container animated fadeIn">
+        <div className="container-fluid animated fadeIn">
             <div className="row pt-2">
                 <div className="col-sm">
                     <h1>Monitoring</h1>
                 </div>
                 <div
                     className="col-sm d-flex justify-content-end align-self-center">
-                    <button type="button" className="btn btn-report">
+                    <Link to="/reports/add" className="btn btn-report btn-lg">
                         Create report
-                    </button>
+                    </Link>
                 </div>
             </div>
             <hr/>

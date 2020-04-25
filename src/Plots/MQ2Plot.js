@@ -98,7 +98,6 @@ export default () => {
     };
 
     const layout = {
-        height: 400,
         title: title,
         font: {
             color: "white"
@@ -183,7 +182,7 @@ export default () => {
     return (
         <>
             {isLoading ? <Spinner/> :
-                <div className="d-flex flex-column animated fadeInLeft">
+                <div className="d-flex flex-column animated fadeInLeft h-75">
                     <div className="d-flex justify-content-between pb-1">
                         <p className="text-white">Updating: {update ? "enabled" : "disabled"}</p>
                         <div>
