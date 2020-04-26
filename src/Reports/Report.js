@@ -6,11 +6,21 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faEnvelope, faFilePdf} from "@fortawesome/free-solid-svg-icons";
 import createPlotlyComponent from "react-plotly.js/factory";
 import Plotly from "plotly.js-finance-dist";
+import fileDownload from "js-file-download";
+import LoadingOverlay from 'react-loading-overlay';
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Plot = createPlotlyComponent(Plotly);
 
 async function getData(endpoint) {
     const res = await API.get(endpoint);
+    return res.data;
+}
+
+async function getPDF(endpoint) {
+    const res = await API.get(endpoint, {responseType: "blob"});
     return res.data;
 }
 
@@ -35,7 +45,7 @@ const CaseContent = props => {
                 Level: {props.level}</p>
             <p className="card-text">Device location: {props.location}</p>
             <p className="card-text">Case note: {props.note}</p>
-            <div className="row">
+            <div className="row mb-2">
                 <div className="col-sm-12 col-md-12 col-lg-6">
                     <h5><span className="badge badge-light">Gas concentration</span></h5>
                     <Plot
@@ -63,10 +73,9 @@ const LogContent = props => {
     return (
         <>
             <h5><span className="badge badge-light">Camera logs</span></h5>
-            <p className="card-text">Log datetime{props.log_datetime}</p>
+            <p className="card-text">Log datetime: {new Date(props.datetime).toLocaleString()}</p>
             <p className="card-text">Camera location: {props.camera_location}</p>
-            <p className="card-text">Recognized objects by camera: {props.log_recognized_objects}</p>
-            />
+            <p className="card-text">Recognized objects by camera: {props.recognized_objects}</p>
         </>
     )
 };
@@ -76,6 +85,7 @@ export default (props) => {
     const history = useHistory();
     const id = props.match.params.id;
     const [isLoading, setIsLoading] = useState(true);
+    const [isDownloading, setIsDownloading] = useState(false);
     const [data, setData] = useState(null);
     const [GasLeakExist, setGasLeakExist] = useState(false);
     const [CameraDetectionExist, setCameraDetectionExist] = useState(false);
@@ -140,6 +150,21 @@ export default (props) => {
         history.push('/reports')
     }
 
+    function downloadAsPDF() {
+        setIsDownloading(true);
+        getPDF(`/report/generate/${id}`).then(data => {
+            fileDownload(data, `gasdnw report at ${new Date().toLocaleString()}.pdf`, "application/pdf");
+
+        }).catch(err => {
+            toast.error("Error was occured.", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }).finally(() => {
+                setIsDownloading(false);
+            }
+        );
+    }
+
     useEffect(() => {
         getData(`/reports/${id}`).then(data => {
             setData(data);
@@ -169,7 +194,7 @@ export default (props) => {
             }
 
             if (data['log_datetime'] !== undefined) {
-
+                setCameraDetectionExist(true);
             }
 
         }).catch(err => {
@@ -181,62 +206,73 @@ export default (props) => {
 
 
     return (
-        <div className="container-fluid animated fadeIn">
-            <div className="row pt-2">
-                <div className="col-sm">
-                    <h1>Report detail info</h1>
-                </div>
-            </div>
-            <hr/>
-            <div className="row">
-                <div className="col">
-                    <div className="d-flex justify-content-start">
-                        <button className="btn btn-secondary btn-lg mr-1" onClick={backToReports}>
-                            <FontAwesomeIcon icon={faArrowLeft}/>
-                            &nbsp;
-                            Back to reports
-                        </button>
-                        <button className="btn btn-danger btn-lg mr-1">
-                            <FontAwesomeIcon icon={faFilePdf}/>
-                            &nbsp;
-                            Save as PDF
-                        </button>
-                        <button className="btn btn-primary btn-lg">
-                            <FontAwesomeIcon icon={faEnvelope}/>
-                            &nbsp;
-                            Send by email
-                        </button>
+        <LoadingOverlay
+            active={isDownloading}
+            spinner
+            text='Generating report...'>
+            <ToastContainer/>
+            <div className="container-fluid animated fadeIn">
+                <div className="row pt-2">
+                    <div className="col-sm">
+                        <h1>Report detail info</h1>
                     </div>
-
-                    {
-                        isLoading ? <Spinner/> :
-                            <div className="card bg-dark my-2 text-white">
-                                <h5 className="card-header">Report created
-                                    at {new Date(data.created_at).toLocaleString()}</h5>
-                                <div className="card-body">
-                                    <h5 className="card-title">Report content: {data.content}</h5>
-                                    {/* Gas leak */}
-                                    {GasLeakExist ?
-                                        <CaseContent
-                                            datetime={data.case_datetime}
-                                            level={data.case_level}
-                                            location={data.device_location}
-                                            note={data.case_note}
-                                            mq2data={mq2data}
-                                            dhtdata={dhtdata}
-                                        /> : null
-                                    }
-                                    {/* Camera detection */}
-                                    {CameraDetectionExist ?
-                                        <LogContent/> : null
-                                    }
-                                </div>
-                            </div>
-                    }
                 </div>
-            </div>
+                <hr/>
+                <div className="row">
+                    <div className="col">
+                        <div className="d-flex justify-content-start">
+                            <button className="btn btn-secondary btn-lg mr-1" onClick={backToReports}>
+                                <FontAwesomeIcon icon={faArrowLeft}/>
+                                &nbsp;
+                                Back to reports
+                            </button>
+                            <button className="btn btn-danger btn-lg mr-1" onClick={downloadAsPDF}>
+                                <FontAwesomeIcon icon={faFilePdf}/>
+                                &nbsp;
+                                Download as PDF
+                            </button>
+                            <button className="btn btn-primary btn-lg">
+                                <FontAwesomeIcon icon={faEnvelope}/>
+                                &nbsp;
+                                Send by email
+                            </button>
+                        </div>
 
-        </div>
+                        {
+                            isLoading ? <Spinner/> :
+                                <div className="card bg-dark my-2 text-white">
+                                    <h5 className="card-header">Report created
+                                        at {new Date(data.created_at).toLocaleString()}</h5>
+                                    <div className="card-body">
+                                        <h5 className="card-title">Report content: {data.content}</h5>
+                                        {/* Gas leak */}
+                                        {GasLeakExist ?
+                                            <CaseContent
+                                                datetime={data.case_datetime}
+                                                level={data.case_level}
+                                                location={data.device_location}
+                                                note={data.case_note}
+                                                mq2data={mq2data}
+                                                dhtdata={dhtdata}
+                                            /> : null
+                                        }
+                                        {/* Camera detection */}
+                                        {CameraDetectionExist ?
+                                            <LogContent
+                                                datetime={data.log_datetime}
+                                                camera_location={data.camera_location}
+                                                recognized_objects={data.log_recognized_objects}
+                                            /> : null
+                                        }
+                                    </div>
+                                </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </LoadingOverlay>
+
     )
 }
 
