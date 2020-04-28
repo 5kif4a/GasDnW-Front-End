@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
     <title>GasDnW</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
+</head>
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div id="root"></div>
+</body>
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyABjlThAbiQQ1ntoB2HF2HQjR3yPANOICk",
+        authDomain: "gasdnw.firebaseapp.com",
+        databaseURL: "https://gasdnw.firebaseio.com",
+        projectId: "gasdnw",
+        storageBucket: "gasdnw.appspot.com",
+        messagingSenderId: "539645073280",
+        appId: "1:539645073280:web:b16173bc423e42523f1365"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+</script>
 </html>

@@ -18,17 +18,12 @@ const columns = [
         sort: 'asc'
     },
     {
-        label: 'Content',
-        field: 'content',
-        sort: 'asc'
-    },
-    {
         label: 'Case datetime',
         field: 'case_datetime'
     },
     {
         label: 'Case level',
-        field: 'case_datetime'
+        field: 'case_level'
     },
     {
         label: 'Device location',

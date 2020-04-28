@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
-import API from "../Utils/API";
+import API, {baseURL} from "../Utils/API";
 import Spinner from "../Utils/Spinner";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeft, faEnvelope, faFilePdf} from "@fortawesome/free-solid-svg-icons";
+import {faArrowLeft, faEnvelope, faFilePdf, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 import createPlotlyComponent from "react-plotly.js/factory";
 import Plotly from "plotly.js-finance-dist";
 import fileDownload from "js-file-download";
 import LoadingOverlay from 'react-loading-overlay';
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {MDBBtn, MDBContainer, MDBModal, MDBModalBody, MDBModalFooter, MDBModalHeader} from 'mdbreact';
 
 
 const Plot = createPlotlyComponent(Plotly);
@@ -86,6 +87,8 @@ export default (props) => {
     const id = props.match.params.id;
     const [isLoading, setIsLoading] = useState(true);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [mailModal, setMailModal] = useState(false);
     const [data, setData] = useState(null);
     const [GasLeakExist, setGasLeakExist] = useState(false);
     const [CameraDetectionExist, setCameraDetectionExist] = useState(false);
@@ -150,11 +153,51 @@ export default (props) => {
         history.push('/reports')
     }
 
+    function emailHandler(event) {
+        setEmail(event.target.value);
+    }
+
+    function sendMail() {
+        setMailModal(false);
+        fetch(baseURL + 'mail', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    report_id: id
+                    , recipient_mail: email
+                })
+        })
+            .then(res => {
+                console.log(res);
+                if (res.status === 500) {
+                    toast.error("Error was occured.", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                } else {
+                    toast.success("Mail sent.", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                toast.error("Error was occured.", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            })
+    }
+
     function downloadAsPDF() {
         setIsDownloading(true);
         getPDF(`/report/generate/${id}`).then(data => {
             fileDownload(data, `gasdnw report at ${new Date().toLocaleString()}.pdf`, "application/pdf");
-
+            toast.success("Report generated.", {
+                position: toast.POSITION.TOP_RIGHT
+            });
         }).catch(err => {
             toast.error("Error was occured.", {
                 position: toast.POSITION.TOP_RIGHT
@@ -202,7 +245,7 @@ export default (props) => {
         }).finally(() => {
             setIsLoading(false);
         });
-    }, []);
+    }, [id]);
 
 
     return (
@@ -211,6 +254,39 @@ export default (props) => {
             spinner
             text='Generating report...'>
             <ToastContainer/>
+
+            {mailModal ? <MDBContainer>
+                <MDBModal
+                    isOpen={mailModal}
+                    toggle={() => setMailModal(false)}
+                    centered
+                    contentClassName="bg-dark"
+                >
+                    <MDBModalHeader toggle={() => setMailModal(false)}>Send report by email</MDBModalHeader>
+                    <MDBModalBody>
+                        <form>
+                            <div className="form-group">
+                                <label htmlFor="email"
+                                       className="text-white"
+                                >Recipient's Email address</label>
+                                <input type="email"
+                                       className="form-control"
+                                       id="email"
+                                       onChange={emailHandler}
+                                       placeholder="Enter email"
+                                       required
+                                />
+                            </div>
+                        </form>
+                    </MDBModalBody>
+                    <MDBModalFooter>
+                        <MDBBtn color="secondary" onClick={() => setMailModal(false)}>Close</MDBBtn>
+                        <MDBBtn color="primary" onClick={sendMail}>Send report</MDBBtn>
+                    </MDBModalFooter>
+                </MDBModal>
+            </MDBContainer> : null}
+
+
             <div className="container-fluid animated fadeIn">
                 <div className="row pt-2">
                     <div className="col-sm">
@@ -221,20 +297,25 @@ export default (props) => {
                 <div className="row">
                     <div className="col">
                         <div className="d-flex justify-content-start">
-                            <button className="btn btn-secondary btn-lg mr-1" onClick={backToReports}>
+                            <button className="btn btn-secondary mr-1" onClick={backToReports}>
                                 <FontAwesomeIcon icon={faArrowLeft}/>
                                 &nbsp;
                                 Back to reports
                             </button>
-                            <button className="btn btn-danger btn-lg mr-1" onClick={downloadAsPDF}>
+                            <button className="btn btn-info mr-1" onClick={downloadAsPDF}>
                                 <FontAwesomeIcon icon={faFilePdf}/>
                                 &nbsp;
                                 Download as PDF
                             </button>
-                            <button className="btn btn-primary btn-lg">
+                            <button className="btn btn-primary mr-1" onClick={() => setMailModal(true)}>
                                 <FontAwesomeIcon icon={faEnvelope}/>
                                 &nbsp;
                                 Send by email
+                            </button>
+                            <button className="btn btn-danger mr-1">
+                                <FontAwesomeIcon icon={faTrashAlt}/>
+                                &nbsp;
+                                Delete report
                             </button>
                         </div>
 
