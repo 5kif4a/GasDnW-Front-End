@@ -120,8 +120,9 @@ export default class Summary extends Component {
             state.lpg.y = lpg;
             state.co.y = co;
             state.smoke.y = smoke;
+        }).finally(() => {
+            state.isLoading = false;
         });
-        state.isLoading = false;
         this.setState(state);
     }
 

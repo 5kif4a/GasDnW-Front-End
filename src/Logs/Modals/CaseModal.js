@@ -3,7 +3,7 @@ import {MDBBtn, MDBModal, MDBModalBody, MDBModalFooter, MDBModalHeader} from "md
 import createPlotlyComponent from "react-plotly.js/factory";
 import Plotly from "plotly.js-finance-dist";
 import API from "../../Utils/API";
-import {useHistory} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -17,13 +17,13 @@ const layout = {
     font: {
         color: "white"
     },
-    margin: {t: 30, b: 70, l: 30, r: 0},
+    margin: {t: 20, b: 70, l: 30, r: 0},
     plot_bgcolor: "#282724",
     paper_bgcolor: "#3C3F41",
     barmode: 'group',
     legend: {
         x: 0,
-        y: -0.1,
+        y: 1.3,
         orientation: "h"
     }
 };
@@ -37,8 +37,14 @@ const levels = {
 
 const CaseModal = ({location}) => {
     let history = useHistory();
+    const params = useParams();
     const {state = {}} = location;
-    const id = state.id;
+    const id = state.id || params.id;
+
+    if (params.id !== undefined) {
+        state.modal = true;
+    }
+
 
     const [modal_, setModal] = useState(false);
     const [case_, setCase] = useState({});
@@ -168,14 +174,14 @@ const CaseModal = ({location}) => {
                                     className="w-100"
                                     data={mq2data}
                                     layout={layout}
-                                    config={{responsive: true}}
+                                    config={{responsive: true, displayModeBar: false}}
                                 />
                                 <h5><span className="badge badge-light">Air temperature and hudimity</span></h5>
                                 <Plot
                                     className="w-100"
                                     data={dhtdata}
                                     layout={layout}
-                                    config={{responsive: true}}
+                                    config={{responsive: true, displayModeBar: false}}
                                 />
                             </div>
                             <div className="col-4">
