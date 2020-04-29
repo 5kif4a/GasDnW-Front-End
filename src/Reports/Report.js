@@ -89,6 +89,7 @@ export default (props) => {
     const [isDownloading, setIsDownloading] = useState(false);
     const [email, setEmail] = useState("");
     const [mailModal, setMailModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
     const [data, setData] = useState(null);
     const [GasLeakExist, setGasLeakExist] = useState(false);
     const [CameraDetectionExist, setCameraDetectionExist] = useState(false);
@@ -208,6 +209,19 @@ export default (props) => {
         );
     }
 
+    function deleteReport() {
+        API.delete(`/reports/${id}`)
+            .then(res => {
+                console.log(res.data);
+                backToReports();
+            }).catch(err => {
+            console.log(err);
+            toast.error("Error was occured.", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        })
+    }
+
     useEffect(() => {
         getData(`/reports/${id}`).then(data => {
             setData(data);
@@ -286,6 +300,23 @@ export default (props) => {
                 </MDBModal>
             </MDBContainer> : null}
 
+            {deleteModal ? <MDBContainer>
+                <MDBModal
+                    isOpen={deleteModal}
+                    toggle={() => setDeleteModal(false)}
+                    centered
+                    contentClassName="bg-dark"
+                >
+                    <MDBModalHeader toggle={() => setDeleteModal(false)}>Report deletion</MDBModalHeader>
+                    <MDBModalBody>
+                        <h4 className="text-white">Are you sure you want to delete the report?</h4>
+                    </MDBModalBody>
+                    <MDBModalFooter>
+                        <MDBBtn color="secondary" onClick={() => setDeleteModal(false)}>Close</MDBBtn>
+                        <MDBBtn color="danger" onClick={deleteReport}>Delete report</MDBBtn>
+                    </MDBModalFooter>
+                </MDBModal>
+            </MDBContainer> : null}
 
             <div className="container-fluid animated fadeIn">
                 <div className="row pt-2">
@@ -312,7 +343,7 @@ export default (props) => {
                                 &nbsp;
                                 Send by email
                             </button>
-                            <button className="btn btn-danger mr-1">
+                            <button className="btn btn-danger mr-1" onClick={() => setDeleteModal(true)}>
                                 <FontAwesomeIcon icon={faTrashAlt}/>
                                 &nbsp;
                                 Delete report
@@ -356,4 +387,3 @@ export default (props) => {
 
     )
 }
-
