@@ -1,67 +1,53 @@
-import React from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExclamationTriangle, faRedo, faTable, faVideo} from "@fortawesome/free-solid-svg-icons";
+import React, {useState} from "react";
+import {useHistory} from "react-router-dom";
 
 export default props => {
-    const state = {
-        class: "img-fluid img-thumbnail rounded mx-auto d-block",
-        src: props.src
-    };
+    let history = useHistory();
+    const [src, setSrc] = useState(props.src);
 
-    function changeImageOnError(e) {
+    function imgOnError(e) {
         e.target.onError = null;
-        e.target.className = state.class + " animated flash";
+        e.target.className = e.target.className + " animated flash";
         e.target.src = "../img/no-connection.png";
+        console.log('error')
+    }
+
+
+
+    function createReport() {
+        history.push("/reports/add")
+    }
+
+    function reconnect() {
+        setSrc(props.src + "?t=" + new Date().getTime())
+    }
+
+    function goToLogs() {
+        history.push("/logs/camera_logs")
     }
 
     return (
-        <div className="d-flex justify-content-center">
-            <div className="d-flex flex-column pr-2">
-                <h3 className="text-center">
-                    Camera{" "}
-                    <span className="badge badge-primary">
-            <FontAwesomeIcon icon={faVideo}/>
-          </span>
-                </h3>
-                <img
-                    src={state.src}
-                    alt={"No connection"}
-                    width={props.width}
-                    height={props.height}
-                    onError={changeImageOnError}
-                    className={state.class}
-                />
+        <>
+            <div className="d-flex justify-content-start mx-auto">
+                <button
+                    className="btn btn-secondary mr-1"
+                    onClick={goToLogs}
+                >Go to logs</button>
+                <button
+                    className="btn btn-success mr-1"
+                    onClick={reconnect}
+                >Reconnect</button>
+                <button
+                    className="btn btn-report mr-1"
+                    onClick={createReport}
+                >Create report</button>
             </div>
-            <div className="d-flex flex-column align-self-center">
-                <button
-                    type="button"
-                    className="btn btn-primary mb-1"
-                    data-toggle="tooltip"
-                    data-placement="right"
-                    title="Refresh"
-                >
-                    <FontAwesomeIcon icon={faRedo}/>
-                </button>
-                <button
-                    type="button"
-                    className="btn btn-info mb-1"
-                    data-toggle="tooltip"
-                    data-placement="right"
-                    title="See Logs"
-                >
-                    <FontAwesomeIcon icon={faTable}/>
-                </button>
-                <button
-                    type="button"
-                    className="btn btn-danger"
-                    data-toggle="tooltip"
-                    data-placement="right"
-                    title="Report Emergency"
-                    onClick={() => alert("ALARM!!!")}
-                >
-                    <FontAwesomeIcon icon={faExclamationTriangle}/>
-                </button>
-            </div>
-        </div>
+            <img
+                src={src}
+                alt={"No connection"}
+                // className="w-75"
+                onError={imgOnError}
+            />
+        </>
     );
 }

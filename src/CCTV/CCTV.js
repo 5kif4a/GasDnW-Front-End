@@ -16,16 +16,16 @@ export default function CCTV() {
     return (
         <div className="container-fluid animated fadeIn">
             <div className="row pt-2">
-                <div className="col-sm">
+                <div className="col">
                     <h1>CCTV</h1>
                 </div>
             </div>
             <hr/>
             <div className="row">
-                <div className="col">
+                <div className="col m-auto">
                     <VideoStream src={baseURL + "camera/0"}/>
                 </div>
-                <div className="col">
+                <div className="col m-auto">
                     <VideoStream src={baseURL + "camera/1"}/>
                 </div>
             </div>

@@ -17,13 +17,19 @@ async function postData(endpoint, data) {
 }
 
 
-export default () => {
+export default (props) => {
     let history = useHistory();
+    let qs = props.location.search;
+    if (qs !== undefined) {
+        let qs_params = new URLSearchParams(qs);
+        var case_id = qs_params.get("case_id");
+        var log_id = qs_params.get("log_id");
+    }
 
     const [cases, setCases] = useState([]);
     const [logs, setLogs] = useState([]);
-    const [caseID, setCaseID] = useState(undefined);
-    const [logID, setLogID] = useState(undefined);
+    const [caseID, setCaseID] = useState(case_id || undefined);
+    const [logID, setLogID] = useState(log_id || undefined);
     const [reportContent, setReportContent] = useState("");
     const [isCreating, setIsCreating] = useState(false);
 
@@ -53,7 +59,6 @@ export default () => {
                     console.log(err);
                 }).finally(() => {
                 setIsCreating(false);
-                backToReports();
             });
         }
     }

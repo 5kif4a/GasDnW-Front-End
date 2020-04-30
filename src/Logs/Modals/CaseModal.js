@@ -145,7 +145,7 @@ const CaseModal = ({location}) => {
 
     function onCreateReport() {
         setModal(false);
-        history.push('/reports/add');
+        history.push(`/reports/add?case_id=${id}`);
     }
 
     useEffect(() => {
