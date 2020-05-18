@@ -1,6 +1,6 @@
 import {baseURL} from "./Utils/API";
 
-const convertedVapidKey = urlBase64ToUint8Array("BD95yTd3Aj-_SbDNDJj4VKLxLieVgkkeA8z-8dNLsDEbKPgVuLrCJgWNjX1jeD3QSf6a1oTk75Lg4A5fJVstKR8");
+const convertedVapidKey = urlBase64ToUint8Array(process.env.REACT_APP_PUBLIC_VAPID_KEY);
 
 function urlBase64ToUint8Array(base64String) {
     const padding = "=".repeat((4 - base64String.length % 4) % 4)

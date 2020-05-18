@@ -136,7 +136,7 @@ export default class Summary extends Component {
             <>
                 {
                     this.state.isLoading ? <Spinner/> :
-                        <Plot className="w-100 animated fadeInLeft"
+                        <Plot className="w-100 h-75 animated fadeInLeft"
                               data={[this.state.hudimity,
                                   this.state.temperature,
                                   this.state.lpg,

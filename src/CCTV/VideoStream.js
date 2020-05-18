@@ -45,7 +45,7 @@ export default props => {
             <img
                 src={src}
                 alt={"No connection"}
-                // className="w-75"
+                className="img-fluid img-thumbnail w-100 mt-2"
                 onError={imgOnError}
             />
         </>

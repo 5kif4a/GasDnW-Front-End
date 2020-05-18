@@ -119,7 +119,7 @@ function Table(props) {
                 <MDBContainer fluid>
                     <MDBDataTable
                         dark
-                        className="text-white my-2 animated fadeIn"
+                        className="my-2 animated fadeIn"
                         bordered
                         noBottomColumns
                         theadTextWhite
