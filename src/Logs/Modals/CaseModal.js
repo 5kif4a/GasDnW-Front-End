@@ -163,7 +163,7 @@ const CaseModal = ({location}) => {
             >
                 <MDBModalHeader
                     toggle={onClose}
-                >Detail info
+                >Gas leak case detail info
                 </MDBModalHeader>
                 <MDBModalBody>
                     <div className="container">

@@ -27,6 +27,8 @@ const cases_columns = [
         field: 'link_detail'
     }
 ];
+
+
 const camera_logs_columns = [
     {
         label: "#",
@@ -52,6 +54,10 @@ const camera_logs_columns = [
         label: 'Recognized objects',
         field: 'recognized_objects',
         sort: 'asc'
+    },
+    {
+        label: 'Detail info',
+        field: 'link_detail'
     }
 ];
 
@@ -102,6 +108,7 @@ function Table(props) {
                     item['location'] = el['location'];
                     item['recognized_objects'] = el['recognized_objects'];
                     item['date_time'] = new Date(el['date_time']).toLocaleString();
+                    item['link_detail'] = <ButtonViewDetail endpoint={"camera_logs"} id={el.id}/>
                 }
                 return item;
             });

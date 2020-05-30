@@ -1,16 +1,8 @@
 import React from "react";
 import {baseURL} from "../Utils/API";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExclamationTriangle, faRedo, faTable, faVideo} from "@fortawesome/free-solid-svg-icons";
 import VideoStream from "./VideoStream";
-import $ from "jquery";
 
-// Tooltip activating
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-});
-
-
+const cameraURL = process.env.REACT_APP_CAMERA_API_URL;
 
 export default function CCTV() {
     return (
@@ -22,11 +14,11 @@ export default function CCTV() {
             </div>
             <hr/>
             <div className="row">
-                <div className="col m-auto">
+                <div className="col my-1">
                     <VideoStream src={baseURL + "camera/0"}/>
                 </div>
-                <div className="col m-auto">
-                    <VideoStream src={baseURL + "camera/1"}/>
+                <div className="col my-1">
+                    <VideoStream src={cameraURL + 'camera'}/>
                 </div>
             </div>
         </div>

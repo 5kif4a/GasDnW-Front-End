@@ -2,7 +2,7 @@ import React from "react";
 import {Link, Route} from "react-router-dom";
 import {CameraLogsTable, CasesTable} from "./Tables";
 import CaseModal from "./Modals/CaseModal";
-
+import LogModal from "./Modals/LogModal";
 
 export default () => {
     if (window.location.pathname.split('/').length === 3) {
@@ -45,6 +45,7 @@ export default () => {
                 <Route path={'/logs/cases'} component={CasesTable}/>
                 <Route path={'/logs/camera_logs'} component={CameraLogsTable}/>
                 <Route path={"/logs/cases/:id"} component={CaseModal}/>
+                <Route path={"/logs/camera_logs/:id"} component={LogModal}/>
             </div>
         </div>
     )

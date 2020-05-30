@@ -28,7 +28,7 @@ function LogsMainPage() {
             {
                 isLoading ? <Spinner/> :
                     <div className="list-group animated fadeInUp pb-3">
-                        {logs.slice(-5).map((c, index) => {
+                        {logs.slice(0, 5).map((c, index) => {
                             return <Log
                                 key={index}
                                 link={`/logs/camera_logs/${c.id}`}

@@ -4,7 +4,7 @@ const baseURL =  process.env.REACT_APP_API_BASE_URL;
 
 export default axios.create({
     baseURL: baseURL,
-    timeout: 20000
+    timeout: 30000
 });
 
 export {baseURL};
