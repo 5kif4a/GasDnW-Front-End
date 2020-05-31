@@ -12,6 +12,7 @@ import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {MDBBtn, MDBContainer, MDBModal, MDBModalBody, MDBModalFooter, MDBModalHeader} from 'mdbreact';
 
+const cameraURL = process.env.REACT_APP_CAMERA_API_URL;
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -71,12 +72,23 @@ const CaseContent = props => {
 };
 
 const LogContent = props => {
+    var videoURL;
+    if (props.camera_id === 1) videoURL = baseURL;
+    if (props.camera_id === 2) videoURL = cameraURL;
     return (
         <>
             <h5><span className="badge badge-light">Camera logs</span></h5>
-            <p className="card-text">Log datetime: {new Date(props.datetime).toLocaleString()}</p>
-            <p className="card-text">Camera location: {props.camera_location}</p>
+            <p>Camera {props.camera_id} - Location: {props.camera_location}</p>
             <p className="card-text">Recognized objects by camera: {props.recognized_objects}</p>
+            <p className="card-text">Log datetime: {new Date(props.datetime).toLocaleString()}</p>
+            <p>Video recording</p>
+            <div className="container text-center w-75">
+                <div className="embed-responsive embed-responsive-4by3">
+                    <video className="embed-responsive-item text-center" autobuffer playsinline controls>
+                        <source src={`${videoURL}video/${props.video_source}`}/>
+                    </video>
+                </div>
+            </div>
         </>
     )
 };
@@ -372,8 +384,10 @@ export default (props) => {
                                         {CameraDetectionExist ?
                                             <LogContent
                                                 datetime={data.log_datetime}
+                                                camera_id={data.camera_id}
                                                 camera_location={data.camera_location}
                                                 recognized_objects={data.log_recognized_objects}
+                                                video_source={data.video_filename}
                                             /> : null
                                         }
                                     </div>

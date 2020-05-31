@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {MDBBtn, MDBModal, MDBModalBody, MDBModalFooter, MDBModalHeader} from "mdbreact";
-import API from "../../Utils/API";
+import API, {baseURL} from "../../Utils/API";
 import {useHistory, useParams} from "react-router-dom";
+
 const cameraURL = process.env.REACT_APP_CAMERA_API_URL;
 
 async function getData(endpoint) {
@@ -23,11 +24,14 @@ const LogModal = ({location}) => {
 
     const [modal_, setModal] = useState(false);
     const [log, setLog] = useState({});
+    const [videoURL, setVideoURL] = useState(undefined);
 
 
     function get_detail_info() {
         getData(`logs/${id}`).then(data => {
                 let log = data['log'];
+                if (log.camera_id === 1) setVideoURL(baseURL);
+                if (log.camera_id === 2) setVideoURL(cameraURL);
                 setLog(log);
                 setModal(state.modal);
             }
@@ -69,7 +73,7 @@ const LogModal = ({location}) => {
                         <p>Video recording</p>
                         <div className="embed-responsive embed-responsive-4by3">
                             <video className="embed-responsive-item" autobuffer playsinline controls>
-                                <source src={`${cameraURL}video/${log.video_filename}`}/>
+                                <source src={`${videoURL}video/${log.video_filename}`}/>
                             </video>
                         </div>
                     </div>

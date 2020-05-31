@@ -15,7 +15,7 @@ export default function CCTV() {
             <hr/>
             <div className="row">
                 <div className="col my-1">
-                    <VideoStream src={baseURL + "camera/0"}/>
+                    <VideoStream src={baseURL + "camera"}/>
                 </div>
                 <div className="col my-1">
                     <VideoStream src={cameraURL + 'camera'}/>
